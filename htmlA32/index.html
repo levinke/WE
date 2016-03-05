@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+	</head>
+
+	<style>
+		body {
+			background-color: #FFE4B5
+		}
+	</style>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>-->
+			<h1 class="mui-title">html A32 康俊彬测试</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+			</div>
+		</div>
+		<!--居中放置一个音乐播放器-->
+		<audio src="music/Wing.mp3" controls="controls" style="clear:both;display:block;margin:auto">您的浏览器暂时不支持该音乐播放，请尝试更换其他浏览器</audio>
+		<!--在页面中插入二维码图片-->
+		<div style="width: 205px;margin: 0 auto;height: 210px;">
+			<p style="text-align: center;margin: 10px ;">扫描以下二维码，获得该网址
+				<img src="img/p0.png" width="200" height="200" />
+			</p>
+		</div>
+		<!--设置一个固定排行榜-->
+		<table align="center" border="6" width="280" style="align-content: center;margin-top: 20px;">
+			<caption>
+				<h2>排行榜</h2></caption>
+			<tr>
+				<td>排名</td>
+				<td>玩家ID</td>
+				<td>得分记录</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>王南</td>
+				<td>10000</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>林可</td>
+				<td>9870</td>
+			</tr>
+		</table>
+		<!--简单的点击按钮进行计数统计，一行搞定，不多做JS-->
+
+		<input type="submit" value="点击查看计数统计" style="align-content: center;display:block ;margin: auto;margin-top: 10px;" onclick="document.getElementById('count').innerHTML++">
+		<span id="count" style="align-content: center;display: block;margin: auto;text-align: center;">1</span>
+
+		<!--内嵌script，来进行广告处理（此部分参照MUI框架的使用）广告内容需真机联网运行方可加载-->
+		<script type="text/javascript">
+			mui.plusReady(function() {
+				if (plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+					mui.toast("当前网络不给力，无法加载广告");
+				} else {
+					//屏幕真实宽度
+					var width = window.innerWidth;
+					var height = window.innerHeight;
+					//根据投放广告的比例，计算广告高度
+					var adHeight = parseInt(width) * 3 / 20;
+					//广告投放域名地址
+					var ltu = encodeURIComponent('http://www.dcloud.io/ad/');
+					//投放广告的服务端页面标题
+					var title = encodeURIComponent('DCloud HBuilder-做最好的HTML5开发工具||MUI-最接近原生体验的高性能前端框架');
+					var url = 'http://pos.baidu.com/acom?adn=1&at=97&aurl=&cad=1&ccd=24&cec=UTF-8&cfv=18&ch=0&col=en-US&conOP=0&cpa=1&dai=1&dis=0&ltr=&lunum=6&n=99099160_cpr&pis=10000x10000&ps=0x0&qn=31f2f2a7de233256&rad=&rsi5=4&rss0=&rss1=&rss2=&rss3=&rss4=&rss5=&rss6=&rss7=&scale=20.3&skin=mobile_skin_white_blue&td_id=2206321&tn=template_inlay_all_mobile&tpr=1436841400149&ts=1&xuanting=0&tt=1436841400136.14.87.89&dtm=BAIDU_DUP2_SETJSONADSLOT&dc=2&wt=1&distp=1001';
+					url += '&conW=' + width + '&conH=' + adHeight + '&ltu=' + ltu;
+					url += '&di=u2206321'; //广告id
+					url += '&pcs=' + width + 'x' + height;
+					url += '&psr=' + width + 'x' + height;
+					url += '&pss=' + width + 'x0';
+					url += '&rsi0=' + width + '&rsi1=' + adHeight;
+					url += '&ti=' + title;
+					var adBottom = mui.os.ios ? ('-' + adHeight + 'px') : '0';
+					var ad = plus.webview.create(url, 'ad', {
+						height: adHeight + 'px',
+						bottom: adBottom
+					});
+					//目前Android平台不支持子webview的setStyle动画，因此分平台处理；
+					if (mui.os.ios) {
+						//为了支持iOS平台左侧边缘滑动关闭页面，需要append进去；
+						plus.webview.currentWebview().append(ad);
+						ad.addEventListener('loaded', function() {
+							ad.setStyle({
+								bottom: '0',
+								transition: {
+									duration: 150
+								}
+							});
+						});
+					} else {
+						ad.addEventListener('loaded', function() {
+							ad.show('slide-in-bottom');
+						});
+					}
+					ad.appendJsFile('_www/js/ad.js');
+					//设置主页面的底部留白，否则会被遮住；
+					document.querySelector('.mui-content').style.paddingBottom = adHeight + 'px';
+				}
+			});
+		</script>
+
+</html>
